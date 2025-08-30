@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36408.4 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "S1NotesApp", "S1NotesApp.csproj", "{65791FB3-47F8-4263-8BF7-45E3284BE9DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Il2cpp|Any CPU = Il2cpp|Any CPU
+		Mono|Any CPU = Mono|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{65791FB3-47F8-4263-8BF7-45E3284BE9DF}.Il2cpp|Any CPU.ActiveCfg = Il2cpp|Any CPU
+		{65791FB3-47F8-4263-8BF7-45E3284BE9DF}.Il2cpp|Any CPU.Build.0 = Il2cpp|Any CPU
+		{65791FB3-47F8-4263-8BF7-45E3284BE9DF}.Mono|Any CPU.ActiveCfg = Mono|Any CPU
+		{65791FB3-47F8-4263-8BF7-45E3284BE9DF}.Mono|Any CPU.Build.0 = Mono|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2CF77901-5187-4AAF-A26C-4F97D8F3F8CC}
+	EndGlobalSection
+EndGlobal

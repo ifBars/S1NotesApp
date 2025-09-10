@@ -6,12 +6,12 @@ A clean, in-game notes app for Schedule I. Create, edit, star, and manage notes 
 - Create, edit, and delete notes
 - Star important notes (adds a quest entry)
 - Sorted list with clear icons
-- Embedded icon and polished UI
+- Custom Icon and polished UI
 - Saves with your game using S1API
 
 [b]Requirements[/b]
 - MelonLoader
-- S1API
+- [url=https://github.com/ifBars/S1API/releases/latest]S1API[/url]
 
 [b]Installation[/b]
 1) Download the release
@@ -23,9 +23,7 @@ A clean, in-game notes app for Schedule I. Create, edit, star, and manage notes 
 - Click [b]New[/b] to create a note
 - [b]Save[/b] to commit changes, [b]Cancel[/b] to discard, [b]Star[/b] to mark important
 
-[b]Known Notes[/b]
-- Starred notes appear at the top and add a simple quest entry
-- Notes persist per save via S1API
+[b]Please remember, your notes only persist through exiting the game if you save the game before exiting[/b]
 
 [b]Credits[/b]
 - Built on [i]S1API[/i] and [i]MelonLoader[/i]

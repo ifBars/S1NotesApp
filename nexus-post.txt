@@ -1,0 +1,33 @@
+[size=5][b]S1NotesApp[/b][/size]
+
+A clean, in-game notes app for Schedule I. Create, edit, star, and manage notes right from your phone.
+
+[b]Features[/b]
+- Create, edit, and delete notes
+- Star important notes (adds a quest entry)
+- Sorted list with clear icons
+- Embedded icon and polished UI
+- Saves with your game using S1API
+
+[b]Requirements[/b]
+- MelonLoader
+- S1API
+
+[b]Installation[/b]
+1) Download the release
+2) Place the DLL in [i]Schedule I/Mods[/i]
+3) Launch the game
+
+[b]Usage[/b]
+- Open the phone → tap [b]Notes[/b]
+- Click [b]New[/b] to create a note
+- [b]Save[/b] to commit changes, [b]Cancel[/b] to discard, [b]Star[/b] to mark important
+
+[b]Known Notes[/b]
+- Starred notes appear at the top and add a simple quest entry
+- Notes persist per save via S1API
+
+[b]Credits[/b]
+- Built on [i]S1API[/i] and [i]MelonLoader[/i]
+
+[size=1]Made with ♥ for the Schedule I community[/size]

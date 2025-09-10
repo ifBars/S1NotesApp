@@ -15,7 +15,7 @@
 		<MelonLoaderPath>$(GamePath)\MelonLoader\net35</MelonLoaderPath>
 		<ModsPath>$(GamePath)\Mods</ModsPath>
 		<DefineConstants>MONO</DefineConstants>
-		<AssemblyName>S1NotesApp_Mono</AssemblyName>
+		<AssemblyName>S1NotesApp</AssemblyName>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)'=='Il2cpp'">
@@ -90,12 +90,18 @@
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
+	  <None Remove="Apps\notes.png" />
+	</ItemGroup>
+	<ItemGroup>
 	  <Compile Include="Core.cs" />
 	  <Compile Include="Integrations\HarmonyPatches.cs" />
 	  <Compile Include="Utils\Constants.cs" />
 	  <Compile Include="Apps\NotesApp.cs" />
 	  <Compile Include="Services\NotesManager.cs" />
 	  <Compile Include="Quests\StarredNoteQuest.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Include="Apps\notes.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Reference Include="S1API">

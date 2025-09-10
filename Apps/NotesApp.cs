@@ -7,6 +7,8 @@ using S1API.Internal.Utils;
 using UnityEngine.EventSystems;
 using S1API.Internal.Abstraction;
 using S1API.Input;
+using System.Reflection;
+using MelonLoader;
 
 namespace S1NotesApp.Apps
 {
@@ -26,12 +28,19 @@ namespace S1NotesApp.Apps
 		protected override string AppName => "NotesApp";
 		protected override string AppTitle => "Notes";
 		protected override string IconLabel => "Notes";
-		protected override string IconFileName => Path.Combine("NotesApp", "notes.png");
+		protected override string IconFileName => string.Empty; // Using embedded resource instead
 
 		protected override void OnCreated()
 		{
 			// Subscribe to notes loaded event to refresh UI when save data is loaded
 			NotesManager.OnNotesLoaded += OnNotesLoaded;
+			
+			// Set the app icon from embedded resource
+			var iconSprite = LoadEmbeddedNotesIcon();
+			if (iconSprite != null)
+			{
+				SetIconSprite(iconSprite);
+			}
 		}
 
 		protected override void OnDestroyed()
@@ -63,8 +72,13 @@ namespace S1NotesApp.Apps
 			// Right detail/editor panel
 			var rightPanel = UIFactory.Panel("DetailPanel", bg.transform, new Color(0.12f, 0.12f, 0.12f), new Vector2(0.49f, 0f), new Vector2(0.98f, 0.82f));
 			UIFactory.VerticalLayoutOnGO(rightPanel, spacing: 14, padding: new RectOffset(24, 50, 15, 70));
+			
+			// Add welcome message
+			var welcomeText = UIFactory.Text("WelcomeText", "Select a note from the list or create a new one to start editing.", rightPanel.transform, 18, TextAnchor.MiddleCenter, FontStyle.Italic);
+			welcomeText.color = new Color(0.7f, 0.7f, 0.7f, 1f);
+			
 			_editorPanel = CreateEditorPanel(rightPanel.transform);
-			_editorPanel.SetActive(true);
+			_editorPanel.SetActive(false); // Start hidden until a note is being edited
 
 			// container.SetActive(true);
             RefreshList();
@@ -190,6 +204,46 @@ namespace S1NotesApp.Apps
 			}
 		}
 
+		/// <summary>
+		/// Loads the embedded notes.png image from the assembly resources
+		/// </summary>
+		/// <returns>The loaded sprite or null if not found</returns>
+		private Sprite? LoadEmbeddedNotesIcon()
+		{
+			try
+			{
+				// Get the current assembly
+				var assembly = Assembly.GetExecutingAssembly();
+				
+				// Try different possible resource names
+				string[] possibleNames = {
+					"S1NotesApp.notes.png",
+					"S1NotesApp.Apps.notes.png",
+					"notes.png"
+				};
+				
+				foreach (string resourceName in possibleNames)
+				{
+					using var stream = assembly.GetManifestResourceStream(resourceName);
+					if (stream != null)
+					{
+						// Read the stream into a byte array
+						byte[] data = new byte[stream.Length];
+						stream.Read(data, 0, data.Length);
+						
+						// Use S1API's ImageUtils to load the image from byte array
+						return ImageUtils.LoadImageRaw(data);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MelonLogger.Msg($"Failed to load embedded notes icon: {ex.Message}");
+			}
+			
+			return null;
+		}
+
 		private void CreateNoteIcon(Transform parent, bool starred)
 		{
 			// Create an image component for the note icon
@@ -201,12 +255,10 @@ namespace S1NotesApp.Apps
 			iconRT.anchorMax = Vector2.one;
 			iconRT.offsetMin = Vector2.zero;
 			iconRT.offsetMax = Vector2.zero;
-			
 			var iconImage = iconGO.AddComponent<Image>();
 			
-			// Load the notes.png image
-			var iconPath = Path.Combine("NotesApp", "notes.png");
-			var iconSprite = ImageUtils.LoadImage(iconPath);
+			// Load the embedded notes.png image
+			var iconSprite = LoadEmbeddedNotesIcon();
 			if (iconSprite != null)
 			{
 				iconImage.sprite = iconSprite;
@@ -238,22 +290,34 @@ namespace S1NotesApp.Apps
 		{
 			var note = NotesManager.Instance.GetNote(noteId);
 			if (note == null)
+			{
 				return;
+			}
 			_editingNoteId = noteId;
 			_titleInput.text = note.Title;
 			_bodyInput.text = note.Body;
 			_starToggleLabel.text = note.Starred ? "Unstar" : "Star";
+			
+			// Hide welcome message and show editor
+			var welcomeText = _editorPanel.transform.parent.Find("WelcomeText");
+			if (welcomeText != null)
+				welcomeText.gameObject.SetActive(false);
 			_editorPanel.SetActive(true);
 		}
 
 		private void SaveEditingNote()
 		{
+		
 			if (string.IsNullOrEmpty(_editingNoteId))
+			{
+				MelonLogger.Error("Cannot save: _editingNoteId is empty!");
 				return;
+			}
 			NotesManager.Instance.UpdateNote(_editingNoteId, _titleInput.text ?? string.Empty, _bodyInput.text ?? string.Empty);
 			_editorPanel.SetActive(false);
 			Controls.IsTyping = false;
 			RefreshList();
+		
 		}
 
 		private void CancelEditing()
@@ -261,6 +325,11 @@ namespace S1NotesApp.Apps
 			_editorPanel.SetActive(false);
 			_editingNoteId = string.Empty;
 			Controls.IsTyping = false;
+			
+			// Show welcome message again
+			var welcomeText = _editorPanel.transform.parent.Find("WelcomeText");
+			if (welcomeText != null)
+				welcomeText.gameObject.SetActive(true);
 		}
 
 		private void ToggleStarFromEditor()

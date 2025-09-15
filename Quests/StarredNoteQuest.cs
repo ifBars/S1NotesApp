@@ -5,23 +5,25 @@ using S1API.Saveables;
 using UnityEngine;
 using System.Reflection;
 using MelonLoader;
+using System;
 
 namespace S1NotesApp.Quests
 {
 	public class StarredNoteQuest : Quest
 	{
+		[Serializable]
+		private class PersistedData
+		{
+			public string NoteId = string.Empty;
+			public string Title = string.Empty;
+			public string Body = string.Empty;
+		}
+
 		[SaveableField("QuestData")]
-		private QuestData _data = new QuestData(typeof(StarredNoteQuest).FullName ?? "StarredNoteQuest");
+		private PersistedData _data = new PersistedData();
 
-		[SaveableField("NoteId")]
-		private string _noteId = string.Empty;
-		[SaveableField("Title")]
-		private string _title = string.Empty;
-		[SaveableField("Body")]
-		private string _body = string.Empty;
-
-		protected override string Title => string.IsNullOrEmpty(_title) ? "Starred Note" : _title;
-		protected override string Description => string.IsNullOrEmpty(_body) ? "" : _body;
+		protected override string Title => string.IsNullOrEmpty(_data.Title) ? "Starred Note" : _data.Title;
+		protected override string Description => string.IsNullOrEmpty(_data.Body) ? "" : _data.Body;
 		protected override bool AutoBegin => true;
         protected override Sprite? QuestIcon => LoadEmbeddedNotesIcon();
 
@@ -67,9 +69,9 @@ namespace S1NotesApp.Quests
 
         public void BindNote(string noteId, string title, string body)
 		{
-			_noteId = noteId;
-			_title = title;
-			_body = body;
+			_data.NoteId = noteId;
+			_data.Title = title;
+			_data.Body = body;
 			// Use body as the quest entry text when present so the overlay shows note content
 			string entryText = string.IsNullOrWhiteSpace(body) ? title : body;
 			AddEntry(entryText);
@@ -81,7 +83,7 @@ namespace S1NotesApp.Quests
 			// Fallback linear search across active quests
 			for (int i = 0; i < QuestManagerQuests.Count; i++)
 			{
-				if (QuestManagerQuests[i] is StarredNoteQuest q && q._noteId == id)
+				if (QuestManagerQuests[i] is StarredNoteQuest q && q._data != null && q._data.NoteId == id)
 					return q;
 			}
 			return null;
@@ -92,7 +94,7 @@ namespace S1NotesApp.Quests
 			// Rebuild entry text on load if needed so the overlay/UI shows the saved content
 			if (QuestEntries != null && QuestEntries.Count == 0)
 			{
-				string entryText = string.IsNullOrWhiteSpace(_body) ? _title : _body;
+				string entryText = string.IsNullOrWhiteSpace(_data.Body) ? _data.Title : _data.Body;
 				if (!string.IsNullOrWhiteSpace(entryText))
 				{
 					AddEntry(entryText);

@@ -13,8 +13,11 @@ namespace S1NotesApp.Quests
 		[SaveableField("QuestData")]
 		private QuestData _data = new QuestData(typeof(StarredNoteQuest).FullName ?? "StarredNoteQuest");
 
+		[SaveableField("NoteId")]
 		private string _noteId = string.Empty;
+		[SaveableField("Title")]
 		private string _title = string.Empty;
+		[SaveableField("Body")]
 		private string _body = string.Empty;
 
 		protected override string Title => string.IsNullOrEmpty(_title) ? "Starred Note" : _title;
@@ -82,6 +85,19 @@ namespace S1NotesApp.Quests
 					return q;
 			}
 			return null;
+		}
+
+		protected override void OnLoaded()
+		{
+			// Rebuild entry text on load if needed so the overlay/UI shows the saved content
+			if (QuestEntries != null && QuestEntries.Count == 0)
+			{
+				string entryText = string.IsNullOrWhiteSpace(_body) ? _title : _body;
+				if (!string.IsNullOrWhiteSpace(entryText))
+				{
+					AddEntry(entryText);
+				}
+			}
 		}
 
 		private static List<Quest> QuestManagerQuests => (List<Quest>)typeof(QuestManager)

@@ -1,5 +1,4 @@
 ﻿using MelonLoader;
-using S1NotesApp.Integrations;
 using S1NotesApp.Services;
 using S1NotesApp.Utils;
 
@@ -15,11 +14,16 @@ namespace S1NotesApp
         public override void OnInitializeMelon()
         {
             Instance = this;
-            HarmonyPatches.SetModInstance(this);
-            NotesManager.RegisterWithS1API();
+            // NotesManager.RegisterWithS1API();
         }
 
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
+        {
+            if (sceneName != "Menu") return;
+            NotesManager.Instance.ClearNotes();
+        }
+
+        public override void OnSceneWasUnloaded(int buildIndex, string sceneName)
         {
             if (sceneName != "Menu") return;
             NotesManager.Instance.ClearNotes();

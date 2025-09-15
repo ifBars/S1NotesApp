@@ -90,11 +90,14 @@
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
+	  <EmbeddedResource Remove="Integrations\**" />
+	  <None Remove="Integrations\**" />
+	</ItemGroup>
+	<ItemGroup>
 	  <None Remove="Apps\notes.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Include="Core.cs" />
-	  <Compile Include="Integrations\HarmonyPatches.cs" />
 	  <Compile Include="Utils\Constants.cs" />
 	  <Compile Include="Apps\NotesApp.cs" />
 	  <Compile Include="Services\NotesManager.cs" />

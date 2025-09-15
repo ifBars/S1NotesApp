@@ -87,14 +87,24 @@ namespace S1NotesApp.Services
 			return note.Id;
 		}
 
-		public void UpdateNote(string id, string title, string body)
+	public void UpdateNote(string id, string title, string body)
+	{
+		var note = GetNote(id);
+		if (note == null) return;
+		note.Title = title;
+		note.Body = body;
+		note.Updated = DateTime.UtcNow;
+		
+		// If this note is starred, update the corresponding quest
+		if (note.Starred)
 		{
-			var note = GetNote(id);
-			if (note == null) return;
-			note.Title = title;
-			note.Body = body;
-			note.Updated = DateTime.UtcNow;
+			var quest = StarredNoteQuest.FindByNoteId(id);
+			if (quest != null)
+			{
+				quest.BindNote(id, title, body);
+			}
 		}
+	}
 
 		public void DeleteNote(string id)
 		{

@@ -19,7 +19,7 @@ namespace S1NotesApp.Quests
 			public string Body = string.Empty;
 		}
 
-		[SaveableField("QuestData")]
+		[SaveableField("StarredNoteQuestData")]
 		private PersistedData _data = new PersistedData();
 
 		protected override string Title => string.IsNullOrEmpty(_data.Title) ? "Starred Note" : _data.Title;
@@ -74,6 +74,10 @@ namespace S1NotesApp.Quests
 			_data.Body = body;
 			// Use body as the quest entry text when present so the overlay shows note content
 			string entryText = string.IsNullOrWhiteSpace(body) ? title : body;
+			
+			// Clear existing entries and add the updated one
+			QuestEntries.Clear();
+			
 			AddEntry(entryText);
 		}
 

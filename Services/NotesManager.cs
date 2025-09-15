@@ -7,6 +7,11 @@ namespace S1NotesApp.Services
 {
 	public class NotesManager : Saveable
 	{
+		public NotesManager()
+		{
+			Instance = this;
+		}
+
 		public class NoteEntry
 		{
 			public string Id;
@@ -20,7 +25,7 @@ namespace S1NotesApp.Services
 		[SaveableField("NotesData")]
 		private List<NoteEntry> _notes = new List<NoteEntry>();
 
-		public static NotesManager Instance { get; } = new NotesManager();
+		public static NotesManager Instance { get; private set; } = new NotesManager();
 
 		/// <summary>
 		/// Event fired when notes are loaded from save data
@@ -29,6 +34,7 @@ namespace S1NotesApp.Services
 
 		protected override void OnLoaded()
 		{
+			Instance = this;
 			// Normalize IDs/timestamps on load
 			foreach (var n in _notes)
 			{
@@ -39,6 +45,11 @@ namespace S1NotesApp.Services
 
 			// Notify UI that notes have been loaded
 			OnNotesLoaded?.Invoke();
+		}
+
+		protected override void OnCreated()
+		{
+			Instance = this;
 		}
 
 		public static void RegisterWithS1API()

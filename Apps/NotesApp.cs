@@ -284,6 +284,7 @@ namespace S1NotesApp.Apps
 		{
 			var id = NotesManager.Instance.CreateNote("Untitled", string.Empty);
 			BeginEdit(id);
+			Saveable.RequestGameSave();
 		}
 
 		private void BeginEdit(string noteId)
@@ -317,6 +318,7 @@ namespace S1NotesApp.Apps
 			_editorPanel.SetActive(false);
 			Controls.IsTyping = false;
 			RefreshList();
+			Saveable.RequestGameSave(true);
 		
 		}
 
@@ -340,6 +342,7 @@ namespace S1NotesApp.Apps
 			var note = NotesManager.Instance.GetNote(_editingNoteId);
 			_starToggleLabel.text = note != null && note.Starred ? "Unstar" : "Star";
 			RefreshList();
+			Saveable.RequestGameSave(true);
 		}
 
 		private void DeleteFromEditor()
@@ -351,6 +354,7 @@ namespace S1NotesApp.Apps
 			_titleInput.text = string.Empty;
 			_bodyInput.text = string.Empty;
 			RefreshList();
+			Saveable.RequestGameSave(true);
 		}
 	}
 }

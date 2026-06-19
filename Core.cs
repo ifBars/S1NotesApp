@@ -14,7 +14,6 @@ namespace S1NotesApp
         public override void OnInitializeMelon()
         {
             Instance = this;
-            // NotesManager.RegisterWithS1API();
         }
 
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)

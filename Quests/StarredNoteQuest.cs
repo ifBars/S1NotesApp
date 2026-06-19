@@ -1,5 +1,5 @@
 using MelonLoader.Utils;
-using S1API.Internal.Utils;
+using S1API.Utils;
 using S1API.Quests;
 using S1API.Saveables;
 using UnityEngine;
@@ -83,11 +83,10 @@ namespace S1NotesApp.Quests
 
 		public static StarredNoteQuest? FindByNoteId(string id)
 		{
-			var all = QuestManager.GetQuestByName("Starred Note");
 			// Fallback linear search across active quests
 			for (int i = 0; i < QuestManagerQuests.Count; i++)
 			{
-				if (QuestManagerQuests[i] is StarredNoteQuest q && q._data != null && q._data.NoteId == id)
+				if (QuestManagerQuests[i] is StarredNoteQuest q && q._data.NoteId == id)
 					return q;
 			}
 			return null;
@@ -106,10 +105,13 @@ namespace S1NotesApp.Quests
 			}
 		}
 
-		private static List<Quest> QuestManagerQuests => (List<Quest>)typeof(QuestManager)
-			.GetField("Quests", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
-			.GetValue(null);
+		private static List<Quest> QuestManagerQuests
+		{
+			get
+			{
+				var field = typeof(QuestManager).GetField("Quests", BindingFlags.NonPublic | BindingFlags.Static);
+				return field?.GetValue(null) as List<Quest> ?? new List<Quest>();
+			}
+		}
 	}
 }
-
-

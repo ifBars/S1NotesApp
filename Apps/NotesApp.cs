@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using S1API.PhoneApp;
 using S1API.UI;
 using S1NotesApp.Services;
-using S1API.Internal.Utils;
+using S1API.Utils;
 using UnityEngine.EventSystems;
 using S1API.Internal.Abstraction;
 using S1API.Input;
@@ -14,15 +14,15 @@ namespace S1NotesApp.Apps
 {
 	public class NotesApp : PhoneApp
 	{
-		private RectTransform _listContent;
-		private GameObject _editorPanel;
-		private InputField _titleInput;
-		private InputField _bodyInput;
-		private Button _saveButton;
-		private Button _cancelButton;
-		private Button _starToggleButton;
-		private Button _deleteButton;
-		private Text _starToggleLabel;
+		private RectTransform _listContent = null!;
+		private GameObject _editorPanel = null!;
+		private InputField _titleInput = null!;
+		private InputField _bodyInput = null!;
+		private Button _saveButton = null!;
+		private Button _cancelButton = null!;
+		private Button _starToggleButton = null!;
+		private Button _deleteButton = null!;
+		private Text _starToggleLabel = null!;
 		private string _editingNoteId = string.Empty;
 
 		protected override string AppName => "NotesApp";
@@ -358,5 +358,3 @@ namespace S1NotesApp.Apps
 		}
 	}
 }
-
-

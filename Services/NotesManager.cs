@@ -14,9 +14,9 @@ namespace S1NotesApp.Services
 
 		public class NoteEntry
 		{
-			public string Id;
-			public string Title;
-			public string Body;
+			public string Id = string.Empty;
+			public string Title = string.Empty;
+			public string Body = string.Empty;
 			public bool Starred;
 			public DateTime Created;
 			public DateTime Updated;
@@ -50,11 +50,6 @@ namespace S1NotesApp.Services
 		protected override void OnCreated()
 		{
 			Instance = this;
-		}
-
-		public static void RegisterWithS1API()
-		{
-			ModSaveableRegistry.Register(Instance, folderName: "Notes");
 		}
 
 		public IReadOnlyList<NoteEntry> GetAllNotes()
@@ -145,5 +140,3 @@ namespace S1NotesApp.Services
 		}
 	}
 }
-
-

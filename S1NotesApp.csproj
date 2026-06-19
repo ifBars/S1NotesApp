@@ -1,11 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>S1NotesApp</RootNamespace>
 		<LangVersion>default</LangVersion>
+		<Nullable>enable</Nullable>
 		<NeutralLanguage>en-US</NeutralLanguage>
 		<Configurations>Mono;Il2cpp</Configurations>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)'=='Mono'">
+		<TargetFramework>netstandard2.1</TargetFramework>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)'=='Il2cpp'">
+		<TargetFramework>net6.0</TargetFramework>
 	</PropertyGroup>
 
 	<!-- Define paths for different configurations -->
@@ -19,12 +27,12 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)'=='Il2cpp'">
-		<GamePath>D:\SteamLibrary\steamapps\common\Schedule I_public</GamePath>
+		<GamePath>D:\SteamLibrary\steamapps\common\Schedule I</GamePath>
 		<ManagedPath>$(GamePath)\MelonLoader\Il2CppAssemblies</ManagedPath>
 		<MelonLoaderPath>$(GamePath)\MelonLoader\net6</MelonLoaderPath>
 		<ModsPath>$(GamePath)\Mods</ModsPath>
 		<DefineConstants>IL2CPP</DefineConstants>
-		<AssemblyName>S1NotesApp_Il2cpp</AssemblyName>
+		<AssemblyName>S1NotesApp</AssemblyName>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -106,9 +114,14 @@
 	<ItemGroup>
 	  <EmbeddedResource Include="Apps\notes.png" />
 	</ItemGroup>
-	<ItemGroup>
+	<ItemGroup Condition="'$(Configuration)'=='Mono'">
 	  <Reference Include="S1API">
 	    <HintPath>..\S1API\S1API\bin\MonoMelon\netstandard2.1\S1API.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(Configuration)'=='Il2cpp'">
+	  <Reference Include="S1API">
+	    <HintPath>..\S1API\S1API\bin\Il2CppMelon\net6.0\S1API.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 

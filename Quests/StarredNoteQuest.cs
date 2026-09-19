@@ -109,8 +109,8 @@ namespace S1NotesApp.Quests
 		{
 			get
 			{
-				var field = typeof(QuestManager).GetField("Quests", BindingFlags.NonPublic | BindingFlags.Static);
-				return field?.GetValue(null) as List<Quest> ?? new List<Quest>();
+				var questsField = typeof(QuestManager).GetField("Quests", BindingFlags.NonPublic | BindingFlags.Static);
+				return questsField?.GetValue(null) as List<Quest> ?? new List<Quest>();
 			}
 		}
 	}

@@ -24,6 +24,7 @@
 		<ModsPath>$(GamePath)\Mods</ModsPath>
 		<DefineConstants>MONO</DefineConstants>
 		<AssemblyName>S1NotesApp</AssemblyName>
+		<S1APIPath>..\S1API\S1API\bin\MonoMelon\netstandard2.1\S1API.dll</S1APIPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)'=='Il2cpp'">
@@ -33,10 +34,11 @@
 		<ModsPath>$(GamePath)\Mods</ModsPath>
 		<DefineConstants>IL2CPP</DefineConstants>
 		<AssemblyName>S1NotesApp</AssemblyName>
+		<S1APIPath>..\S1API\S1API\bin\Il2CppMelon\net6.0\S1API.dll</S1APIPath>
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<UsePublicized>true</UsePublicized>
+		<UsePublicized>false</UsePublicized>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(Configuration)' == 'Mono' and '$(UsePublicized)' == 'true'">
@@ -47,7 +49,10 @@
 
 	<ItemGroup Condition="'$(Configuration)' == 'Mono' and '$(UsePublicized)' != 'true'">
 		<Reference Include="Assembly-CSharp">
-			<!-- <HintPath>$(ManagedPath)\Assembly-CSharp.dll</HintPath> -->
+			<HintPath>$(ManagedPath)\Assembly-CSharp.dll</HintPath>
+		</Reference>
+		<Reference Include="ScheduleOne.Core">
+			<HintPath>$(ManagedPath)\ScheduleOne.Core.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 
@@ -116,21 +121,28 @@
 	</ItemGroup>
 	<ItemGroup Condition="'$(Configuration)'=='Mono'">
 	  <Reference Include="S1API">
-	    <HintPath>..\S1API\S1API\bin\MonoMelon\netstandard2.1\S1API.dll</HintPath>
+	    <HintPath>$(S1APIPath)</HintPath>
 	  </Reference>
 	</ItemGroup>
 	<ItemGroup Condition="'$(Configuration)'=='Il2cpp'">
+		<Reference Include="Assembly-CSharp">
+			<HintPath>$(ManagedPath)\Assembly-CSharp.dll</HintPath>
+		</Reference>
+		<Reference Include="Il2CppScheduleOne.Core">
+			<HintPath>$(ManagedPath)\Il2CppScheduleOne.Core.dll</HintPath>
+		</Reference>
 	  <Reference Include="S1API">
-	    <HintPath>..\S1API\S1API\bin\Il2CppMelon\net6.0\S1API.dll</HintPath>
+	    <HintPath>$(S1APIPath)</HintPath>
 	  </Reference>
 	</ItemGroup>
 
 	<PropertyGroup>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+		<AutomateLocalDeployment Condition="'$(AutomateLocalDeployment)' == ''">true</AutomateLocalDeployment>
 	</PropertyGroup>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(AutomateLocalDeployment)' == 'true'">
 		<Exec Command="(tasklist | findstr /I &quot;Schedule.*I.exe&quot; &gt;nul &amp;&amp; taskkill /F /IM &quot;Schedule I.exe&quot; &amp;&amp; timeout /t 3 /nobreak &gt;nul) || echo Game not running&#xD;&#xA;for /L %%i in (1,1,5) do (COPY &quot;$(TargetPath)&quot; &quot;$(ModsPath)&quot; &amp;&amp; goto copied || timeout /t 1 /nobreak &gt;nul)&#xD;&#xA;:copied&#xD;&#xA;START &quot;&quot; &quot;$(GamePath)\Schedule I.exe&quot;" />
 	</Target>
 </Project>

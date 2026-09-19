@@ -9,6 +9,7 @@ using S1API.Internal.Abstraction;
 using S1API.Input;
 using System.Reflection;
 using MelonLoader;
+using EventHelper = S1API.Utils.EventHelper;
 
 namespace S1NotesApp.Apps
 {
